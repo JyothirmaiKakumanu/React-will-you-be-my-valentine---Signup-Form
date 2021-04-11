@@ -1,12 +1,44 @@
 h1 {
-    color: #27aedb;
-    text-align: center;
-    }
-    
+  color: #27aedb;
+  font-size: 20px;
+  text-align: center;
+}
 
-button{
-    color: #27aedb;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
+button {
+  color: #27aedb;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin: auto 40%;
+}
+input {
+  width: 30%;
+  padding: 5px 10px;
+  /* border: 1px; */
+  border-radius: 5px;
+  outline: 0;
+  margin: 15px 0;
+  text-align: center;
+}
+
+select {
+  width: 30%;
+  padding: 5px 10px;
+  /* border: none; */
+  border-radius: 5px;
+  outline: none;
+  margin: 15px 0;
+  text-align: center;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  background-color: white;
+  font-family: sans-serif;
+}
+
+p {
+  color: red;
 }
