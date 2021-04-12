@@ -10,6 +10,10 @@ button {
   justify-content: center;
   align-items: center;
   margin: auto 40%;
+  font-size: 20px;
+  border-radius: 5px;
+  width: 100px;
+  height: 40px;
 }
 input {
   width: 30%;
@@ -19,6 +23,7 @@ input {
   outline: 0;
   margin: 15px 0;
   text-align: center;
+  
 }
 
 select {
@@ -29,6 +34,9 @@ select {
   outline: none;
   margin: 15px 0;
   text-align: center;
+}
+b{
+  padding-right:50px;
 }
 
 * {

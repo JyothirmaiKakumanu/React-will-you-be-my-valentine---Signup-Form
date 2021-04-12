@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import "../styles/App.css";
 
 const App = () => {
-  const [details, setDetails] = useState({
+  const defaultDetails = {
     name: "",
     email: "",
     gender: "Male",
     number: "",
     password: ""
-  });
+  };
+
+  const [details, setDetails] = useState(defaultDetails);
 
   const [errors, setErrors] = useState({
     inputName: false,
@@ -17,6 +19,8 @@ const App = () => {
     inputNumber: false,
     inputPass: false
   });
+  var nameRegex = /^([0-9]|[a-z])+([0-9a-z]+)$/i;
+  var phoneRegex = /^[0-9\b]+$/;
 
   const [count, setCount] = useState(0);
   const [submitForm, setSubmitForm] = useState(false);
@@ -44,15 +48,18 @@ const App = () => {
   const handleFormValidation = (event) => {
     console.log(details);
     event.preventDefault();
-    if (details.name === "") {
+    
+    if (details.name === "" || !details.name.match(nameRegex)) {
       setErrors((preField) => {
         setCount(count + 1);
         return { ...preField, inputName: true };
       });
     } else {
-      setErrors((preField) => {
-        return { ...preField, inputName: false };
-      });
+      if (details.name.match(nameRegex)) {
+        setErrors((preField) => {
+          return { ...preField, inputName: false };
+        });
+      }
     }
     if (!details.email.includes("@") || details.email === "") {
       setErrors((preField) => {
@@ -76,15 +83,17 @@ const App = () => {
         return { ...preField, inputGender: false };
       });
     }
-    if (details.phoneNumber === "") {
+    if (details.number === "" || !details.number.match(phoneRegex)) {
       setErrors((preField) => {
         setCount(count + 1);
         return { ...preField, inputNumber: true };
       });
     } else {
+      if(details.number.match(phoneRegex)){
       setErrors((preField) => {
         return { ...preField, inputNumber: false };
       });
+    }
     }
     if (details.password === "" || details.password.length < 6) {
       setErrors((preField) => {
@@ -99,17 +108,19 @@ const App = () => {
 
     if (count === 0) {
       setSubmitForm(true);
+      // setDetails(defaultDetails);
     }
   };
 
   const resetForm = () => {
-    setDetails({
+   setDetails({
       name: "",
       email: "",
       gender: "Male",
       number: "",
       password: ""
     });
+    
   };
 
   return (
@@ -117,33 +128,44 @@ const App = () => {
       <h1 className="formTitle">Form Details</h1>
 
       <form>
-        {submitForm ? (
-          <div className="success-message">
+        {console.log("submitform", submitForm,count)}
+        {(submitForm && count === 0) ? (
+          <>
+          {/* {resetForm} */}
+          <div className="success-message" >
             Hello {details.email.split("@")[0]}
           </div>
+          </>
+          
         ) : null}
         <label id="name">
-          Name:
+          <b>Name:</b>
           <input
             data-testid="name"
             type="alphanumeric"
             className="formInputs"
             defaultValue=""
             onChange={onNameChange}
-            // value={details.name}
+          // value={details.name}
           />
-          {errors.inputName ? <p>Name is not alphanumeric</p> : ""}
+          {errors.inputName && details.name==="" ? <p>Name Error</p> : ""}
+          {errors.inputName && !details.name.match(nameRegex)? <p>Name is not alphanumeric</p> : ""}
         </label>
 
         <br />
         <label id="email">
-          Email Address:
+          <b>Email Address:</b>
           <input
             data-testid="email"
             type="email"
             className="formInputs"
             onChange={onEmailChange}
           />
+          {errors.inputEmail && details.email==="" ? (
+            <p>Email Error</p>
+          ) : (
+            ""
+          )}
           {errors.inputEmail && !details.email.includes("@") ? (
             <p>Email must contain @</p>
           ) : (
@@ -153,7 +175,7 @@ const App = () => {
 
         <br />
         <label id="gender">
-          Gender:
+          <b>Gender:</b>
           <select
             data-testid="gender"
             className="formInputs"
@@ -171,15 +193,21 @@ const App = () => {
         </label>
 
         <br />
+        {console.log("phone ", errors.inputNumber)}
         <label id="phone">
-          Phone Number:
+          <b>Phone Number:</b>
           <input
             data-testid="phoneNumber"
-            type="Number"
+            type="number"
             className="formInputs"
             onChange={onPhoneNumberChange}
           />
-          {errors.inputNumber ? (
+          {errors.inputNumber && details.number==="" ? (
+            <p>Phone Number Error</p>
+          ) : (
+            ""
+          )}
+          {errors.inputNumber && !details.number.match(phoneRegex)? (
             <p>Phone Number must contain only numbers</p>
           ) : (
             ""
@@ -188,14 +216,19 @@ const App = () => {
 
         <br />
         <label id="password">
-          Password:
+          <b> Password:</b>
           <input
             data-testid="password"
             type="password"
             className="formInputs"
             onChange={onPasswordChange}
           />
-          {errors.inputPass ? (
+          {errors.inputPass && details.password===""? (
+            <p>Password Error</p>
+          ) : (
+            ""
+          )}
+          {errors.inputPass && details.password.length<6? (
             <p>Password must contain atleast 6 characters</p>
           ) : (
             ""
